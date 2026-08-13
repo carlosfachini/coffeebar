@@ -4,7 +4,7 @@
   <img src="docs/coffeebar-icon.png" alt="CoffeeBar app icon" width="144" />
 </p>
 
-<p align="center"><strong>Keep your Mac awake while your work is running.</strong></p>
+<p align="center"><strong>Keep your Mac awake while AI agents and long-running tasks finish.</strong></p>
 
 <p align="center">
   <a href="https://github.com/carlosfachini/coffeebar/releases/latest"><img src="https://img.shields.io/github/v/release/carlosfachini/coffeebar?style=flat-square" alt="Latest release" /></a>
@@ -13,30 +13,30 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="MIT License" /></a>
 </p>
 
-CoffeeBar is a small, native macOS menu bar app that prevents idle system sleep while long-running work finishes. It uses Apple's native activity API, has no accounts or telemetry, and does not change power settings permanently.
+CoffeeBar is a lightweight native macOS menu bar app that prevents idle system sleep while AI agents, builds, downloads, and other long-running tasks finish. It has no accounts or telemetry and never changes your power settings permanently.
 
 <p align="center">
   <img src="docs/coffeebar.png" alt="CoffeeBar menu showing Keep Mac Awake and Launch at Login controls" width="420" />
 </p>
 
-## Features
+## Why CoffeeBar?
 
-- Native SwiftUI menu bar app with no permanent Dock icon.
-- Manual **Keep Mac Awake** switch.
-- Clear active/inactive status and menu bar badge.
-- Prevents idle system sleep while still allowing display sleep and screen locking.
-- Real application in `/Applications`, with a Finder and Launchpad icon.
+Long-running work can be interrupted when a Mac goes to sleep. CoffeeBar gives you one clear switch to keep the system awake only while you need it.
+
+- One-click **Keep Mac Awake** control.
+- Native menu bar experience with no permanent Dock icon.
+- Clear active and inactive status.
 - Optional **Launch at Login**, disabled by default.
-- Daily, privacy-preserving GitHub version check.
-- Universal release for Apple Silicon and Intel Macs.
-- Zero telemetry and no external runtime dependencies.
-
-## Requirements
-
-- macOS 14 Sonoma or later.
-- Homebrew for terminal installation.
+- Universal app for Apple Silicon and Intel Macs.
+- Daily update notice through GitHub Releases.
+- No analytics, telemetry, accounts, or external runtime dependencies.
 
 ## Install
+
+### Requirements
+
+- macOS 14 Sonoma or later.
+- Homebrew is optional and only required for terminal installation.
 
 ### Homebrew
 
@@ -44,13 +44,13 @@ CoffeeBar is a small, native macOS menu bar app that prevents idle system sleep 
 brew install --cask carlosfachini/tap/coffeebar
 ```
 
-Homebrew installs `CoffeeBar.app` in `/Applications`. Installation does not launch the app automatically. Open CoffeeBar from Finder, Launchpad, or Spotlight when ready.
+Homebrew installs `CoffeeBar.app` in `/Applications`. Installation does not launch the app automatically.
 
 ### GitHub Releases
 
 Download the latest universal ZIP from [GitHub Releases](https://github.com/carlosfachini/coffeebar/releases/latest), extract it, and move `CoffeeBar.app` to `/Applications`.
 
-## First launch on macOS
+### First launch
 
 CoffeeBar does not use a paid Apple Developer account, so its releases cannot be notarized. Gatekeeper may block the first launch even though the app is open source and its release checksum is published.
 
@@ -66,7 +66,7 @@ Only override Gatekeeper for a build downloaded from this repository or installe
 
 ## Usage
 
-1. Open CoffeeBar.
+1. Open CoffeeBar from Finder, Launchpad, or Spotlight.
 2. Click the cup in the menu bar.
 3. Enable **Keep Mac Awake** while work is running.
 4. Disable it when normal idle sleep should resume.
@@ -75,15 +75,15 @@ The active panel shows **Active — idle sleep is blocked**, and the menu bar cu
 
 ### Reopen CoffeeBar
 
-Choosing **Quit CoffeeBar** removes its menu bar item. Reopen `/Applications/CoffeeBar.app` from Finder, Launchpad, or Spotlight to restore it.
+Choosing **Quit CoffeeBar** removes its menu bar item. Open `/Applications/CoffeeBar.app` again to restore it.
 
 ### Launch at Login
 
-Enable **Launch at Login** in the CoffeeBar panel if the app should return after signing in or restarting the Mac. This option is disabled by default and can be changed at any time.
+Enable **Launch at Login** if CoffeeBar should return after signing in or restarting the Mac. This option is disabled by default.
 
 ## Updates
 
-CoffeeBar checks the public latest-release endpoint at most once every 24 hours. When a newer version exists, the panel shows a link to its release notes. The check sends no account or usage information and failure never affects Keep Awake.
+CoffeeBar checks GitHub at most once every 24 hours. When a newer version exists, the panel shows a link to its release. The check sends no account or usage information and never affects Keep Awake.
 
 Upgrade a Homebrew installation with:
 
@@ -92,88 +92,20 @@ brew update
 brew upgrade --cask carlosfachini/tap/coffeebar
 ```
 
-CoffeeBar intentionally does not include an automatic updater.
+CoffeeBar intentionally does not install updates automatically.
 
 ## How it works
 
-```text
-MenuBarExtra
-  -> AppState
-  -> SleepManager
-  -> ProcessInfo.beginActivity(.idleSystemSleepDisabled)
-```
-
-The activity exists only while Keep Awake is enabled. CoffeeBar ends it when the switch is disabled or the app terminates. Display sleep, screen locking, and manual sleep remain available.
-
-Supporting services are isolated from the sleep state:
-
-```text
-LaunchAtLoginManager -> SMAppService.mainApp
-UpdateChecker        -> GitHub Releases API, cached for 24 hours
-```
+CoffeeBar uses a native macOS activity to prevent idle system sleep only while Keep Awake is enabled. Display sleep, screen locking, and manual sleep remain available, and normal behavior returns immediately when CoffeeBar is disabled or closed.
 
 ## Privacy and security
 
 - No analytics or telemetry.
 - No accounts, login, cookies, or API keys.
-- No background server.
-- No shell commands used by the running app.
+- No background server or shell commands.
 - No permanent changes to macOS power settings.
 - One optional public GitHub request per day for version information.
-- Release ZIPs are ad-hoc signed and published with SHA-256 digests.
-- Homebrew verifies the exact release SHA-256 before installation.
-
-## Development
-
-### Prerequisites
-
-- macOS 14 or later.
-- Xcode 26 or a compatible later version.
-
-### Open the project
-
-```bash
-git clone https://github.com/carlosfachini/coffeebar.git
-cd coffeebar
-open CoffeeBar/CoffeeBar.xcodeproj
-```
-
-Select the `CoffeeBar` scheme and run the **My Mac** destination.
-
-### Test from Terminal
-
-```bash
-xcodebuild test \
-  -project CoffeeBar/CoffeeBar.xcodeproj \
-  -scheme CoffeeBar \
-  -destination 'platform=macOS' \
-  -derivedDataPath /tmp/CoffeeBarDerivedData \
-  CODE_SIGNING_ALLOWED=NO
-```
-
-### Project structure
-
-```text
-CoffeeBar/
-├── CoffeeBar/
-│   ├── App/                 # Application entry point and lifecycle
-│   ├── Features/MenuBar/    # Menu bar panel
-│   ├── Models/              # UI state
-│   ├── Services/            # Sleep, login item, and update services
-│   └── Assets.xcassets/     # App icon and colors
-└── CoffeeBarTests/          # Unit tests
-
-.github/workflows/           # CI and tagged releases
-homebrew/Casks/              # Cask template
-scripts/                     # Version, package, and Cask tooling
-docs/                        # Screenshots and distribution design
-```
-
-## Releases
-
-Releases follow semantic versioning. Pushing a matching tag such as `v0.1.0` runs tests, builds an ad-hoc-signed universal app, validates both CPU architectures, generates a SHA-256 digest, and publishes the artifacts to GitHub Releases.
-
-See [RELEASING.md](RELEASING.md) for the maintainer workflow and [distribution design](docs/DISTRIBUTION_DESIGN.md) for architectural decisions.
+- Release ZIPs include SHA-256 verification, and Homebrew validates the exact release checksum.
 
 ## Uninstall
 
@@ -197,23 +129,19 @@ CoffeeBar was likely quit. Open `/Applications/CoffeeBar.app` again.
 
 ### macOS says the developer cannot be verified
 
-Follow the [first-launch steps](#first-launch-on-macos). This is expected because CoffeeBar is not notarized.
+Follow the [first-launch steps](#first-launch). This is expected because CoffeeBar is not notarized.
 
-### Keep Awake is on but the Mac display turns off
+### Keep Awake is on but the display turns off
 
-Expected behavior. CoffeeBar blocks idle **system** sleep, not display sleep or screen locking.
+This is expected. CoffeeBar blocks idle **system** sleep, not display sleep or screen locking.
 
 ### No update notice appears
 
-The check is cached for 24 hours and fails silently when GitHub is unavailable. Homebrew can always check directly with `brew outdated --cask`.
+The check is cached for 24 hours and fails silently when GitHub is unavailable. Homebrew can check directly with `brew outdated --cask`.
 
 ## Contributing
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Keep changes native, small, private by default, and covered by tests.
-
-## Roadmap
-
-See [ROADMAP.md](ROADMAP.md).
+Development and contribution instructions are available in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
