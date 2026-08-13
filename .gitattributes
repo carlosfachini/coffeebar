@@ -1,0 +1,4 @@
+*.swift linguist-language=Swift linguist-detectable=true
+*.rb.template linguist-language=Ruby linguist-detectable=true
+*.sh linguist-language=Shell linguist-detectable=true
+
