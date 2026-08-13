@@ -53,8 +53,18 @@ MenuBarExtra
 - Use SwiftUI `MenuBarExtra` instead of a custom `NSStatusItem`.
 - Use `.idleSystemSleepDisabled` so display sleep and session locking remain available.
 - Keep state in memory and start inactive on every launch.
-- Keep the GitHub URL unconfigured until an official Git remote is available.
+- Use the official `https://github.com/carlosfachini/coffeebar` repository for public links and update metadata.
 - Use no timers, subprocesses, external dependencies, analytics or telemetry.
+
+## Version 0.1 Distribution
+
+- Install `CoffeeBar.app` in `/Applications` through a Homebrew Cask.
+- Keep a separate `carlosfachini/homebrew-tap` repository for the public Cask.
+- Publish universal GitHub Release ZIPs with ad-hoc signing and SHA-256 digests.
+- Document Gatekeeper's **Privacy & Security > Open Anyway** flow because no Apple Developer account is used.
+- Offer native Launch at Login through `SMAppService`, disabled by default.
+- Check GitHub Releases at most once per day and show an informational update link.
+- Keep upgrades under Homebrew or manual Release control; do not add an automatic updater.
 
 Future versions may include:
 

@@ -10,9 +10,8 @@
 
 ## Version 0.2
 
-- Better Icons
 - About Window
-- UserDefaults
+- Smart Mode discovery
 
 ---
 
@@ -34,5 +33,5 @@
 ## Future
 
 - Plugins
-- Homebrew
-- Auto Updates
+- Additional process detection
+- Optional release channels

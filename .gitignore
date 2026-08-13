@@ -1,0 +1,9 @@
+.DS_Store
+DerivedData/
+build/
+*.xcarchive
+*.zip
+*.sha256
+CoffeeBar/.git.backup/
+CoffeeBar/CoffeeBar.xcodeproj/xcuserdata/
+

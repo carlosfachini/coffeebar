@@ -1,0 +1,99 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-latest
+    env:
+      HAS_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate tag and project version
+        run: |
+          PROJECT_VERSION=$(scripts/read-version.sh)
+          if [[ "$GITHUB_REF_NAME" != "v$PROJECT_VERSION" ]]; then
+            echo "Tag $GITHUB_REF_NAME does not match project version v$PROJECT_VERSION"
+            exit 1
+          fi
+
+      - name: Test
+        run: |
+          xcodebuild test \
+            -project CoffeeBar/CoffeeBar.xcodeproj \
+            -scheme CoffeeBar \
+            -destination 'platform=macOS' \
+            -derivedDataPath "$RUNNER_TEMP/CoffeeBarTests" \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Package universal app
+        run: scripts/package-release.sh "$GITHUB_REF_NAME"
+
+      - name: Locate release assets
+        id: assets
+        run: |
+          VERSION=$(scripts/read-version.sh)
+          ZIP="build/release/CoffeeBar-macos-universal-$VERSION.zip"
+          SHA_FILE="$ZIP.sha256"
+          SHA=$(awk '{print $1}' "$SHA_FILE")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "zip=$ZIP" >> "$GITHUB_OUTPUT"
+          echo "sha_file=$SHA_FILE" >> "$GITHUB_OUTPUT"
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" \
+              '${{ steps.assets.outputs.zip }}' \
+              '${{ steps.assets.outputs.sha_file }}' \
+              --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" \
+              '${{ steps.assets.outputs.zip }}' \
+              '${{ steps.assets.outputs.sha_file }}' \
+              --verify-tag \
+              --generate-notes \
+              --title "CoffeeBar ${{ steps.assets.outputs.version }}"
+          fi
+
+      - name: Checkout Homebrew tap
+        if: env.HAS_TAP_TOKEN == 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: carlosfachini/homebrew-tap
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          path: homebrew-tap
+
+      - name: Update Homebrew Cask
+        if: env.HAS_TAP_TOKEN == 'true'
+        run: |
+          mkdir -p homebrew-tap/Casks
+          scripts/render-cask.sh \
+            '${{ steps.assets.outputs.version }}' \
+            '${{ steps.assets.outputs.sha }}' \
+            > homebrew-tap/Casks/coffeebar.rb
+          cd homebrew-tap
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Casks/coffeebar.rb
+          if ! git diff --cached --quiet; then
+            git commit -m "Update CoffeeBar to ${{ steps.assets.outputs.version }}"
+            git push
+          fi
+
+      - name: Tap update notice
+        if: env.HAS_TAP_TOKEN != 'true'
+        run: |
+          echo "Release published. Configure HOMEBREW_TAP_TOKEN to update carlosfachini/homebrew-tap automatically."

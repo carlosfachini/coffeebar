@@ -13,12 +13,18 @@ All notable CoffeeBar changes are documented in this file.
 - Distinct inactive and active SF Symbols in the menu bar.
 - Bundle-derived version display and native Quit action.
 - Cleanup of active sleep prevention before application termination.
+- Native Launch at Login control, disabled by default.
+- Cached GitHub Releases check with an informational update notice.
+- Finder and Launchpad app icon.
+- Homebrew Cask template and tagged GitHub Release automation.
+- Universal release packaging with ad-hoc signing and SHA-256 verification.
+- Public installation, Gatekeeper, maintenance and release documentation.
 
 ### Changed
 
 - Configured CoffeeBar as an agent application without a permanent Dock icon.
 - Set application marketing version to `0.1.0`.
 
-### Pending configuration
+### Distribution note
 
-- Official GitHub repository URL. The GitHub menu item remains disabled until a Git remote is configured.
+- Releases are not notarized because CoffeeBar does not use a paid Apple Developer account. First launch requires macOS **Privacy & Security > Open Anyway** approval.
