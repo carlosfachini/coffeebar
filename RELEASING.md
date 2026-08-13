@@ -2,14 +2,9 @@
 
 CoffeeBar releases are unsigned by an Apple Developer ID. They are ad-hoc signed, hashed, and published through GitHub Releases.
 
-## One-time setup
-
-1. Make `carlosfachini/coffeebar` public before the first public release.
-2. Create the public repository `carlosfachini/homebrew-tap` with a `Casks` directory.
-3. Create a fine-grained GitHub token with repository contents write access only to `homebrew-tap`.
-4. Add that token to the CoffeeBar repository as the `HOMEBREW_TAP_TOKEN` Actions secret.
-
-The token is optional. Without it, GitHub Releases still work and the Cask can be rendered manually.
+The public Homebrew tap lives at `carlosfachini/homebrew-tap`. It checks the
+latest public CoffeeBar Release every six hours and updates its Cask using its
+own scoped `GITHUB_TOKEN`; no personal access token is required.
 
 ## Prepare a release
 
@@ -25,7 +20,13 @@ The token is optional. Without it, GitHub Releases still work and the Cask can b
    git push origin v0.1.0
    ```
 
-The Release workflow validates that the tag matches the project version, tests the app, builds a universal archive, applies an ad-hoc signature, verifies both CPU architectures, creates the ZIP and SHA-256 file, publishes the GitHub Release, and updates the tap when its token is configured.
+The Release workflow validates that the tag matches the project version, tests the app, builds a universal archive, applies an ad-hoc signature, verifies both CPU architectures, creates the ZIP and SHA-256 file, and publishes the GitHub Release.
+
+The tap will discover the Release automatically. To update it immediately instead of waiting for the schedule:
+
+```bash
+gh workflow run update-cask.yml --repo carlosfachini/homebrew-tap
+```
 
 ## Local package verification
 
@@ -57,4 +58,3 @@ Then verify:
 - Keep Awake activates and deactivates.
 - Launch at Login is off initially, can be enabled, and survives sign-out/sign-in.
 - `brew upgrade --cask carlosfachini/tap/coffeebar` installs a later release.
-
