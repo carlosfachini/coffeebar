@@ -2,6 +2,12 @@
 
 All notable CoffeeBar changes are documented in this file.
 
+## Unreleased
+
+### Added
+
+- Auto-off for Keep Awake sessions: 30 minutes by default, 1 hour, or manual disable.
+
 ## 0.1.0
 
 ### Added

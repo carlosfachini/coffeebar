@@ -77,6 +77,38 @@ struct MenuBarView: View {
 
             HStack(spacing: 10) {
                 VStack(alignment: .leading, spacing: 2) {
+                    Text("Auto-off")
+                        .fontWeight(.medium)
+
+                    Text(appState.autoOffDate?.formatted(date: .omitted, time: .shortened) ?? "Turns Keep Awake off automatically")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                Picker(
+                    "Auto-off after",
+                    selection: Binding(
+                        get: { appState.autoOffDuration },
+                        set: appState.setAutoOffDuration
+                    )
+                ) {
+                    ForEach(AutoOffDuration.allCases) { duration in
+                        Text(duration.label).tag(duration)
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.menu)
+            }
+            .padding(14)
+            .accessibilityElement(children: .contain)
+            .accessibilityLabel("Auto-off after")
+
+            Divider()
+
+            HStack(spacing: 10) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text("Launch at Login")
                         .fontWeight(.medium)
 

@@ -29,6 +29,7 @@ It should feel like a first-party macOS utility.
 Current version focuses only on:
 
 - Prevent Idle Sleep
+- Session auto-off after 30 minutes, 1 hour, or manual disable
 - Menu Bar
 - Native APIs
 
@@ -44,7 +45,7 @@ MenuBarExtra
 ```
 
 - `MenuBarExtra` owns the native menu bar interface.
-- `AppState` exposes the current `isActive` state to SwiftUI.
+- `AppState` exposes the current `isActive` state and owns one cancelable auto-off task per active session.
 - `SleepManager` owns the activity returned by `ProcessInfo` and makes activation and deactivation idempotent.
 - `ApplicationDelegate` releases any active sleep assertion before termination.
 
@@ -54,7 +55,7 @@ MenuBarExtra
 - Use `.idleSystemSleepDisabled` so display sleep and session locking remain available.
 - Keep state in memory and start inactive on every launch.
 - Use the official `https://github.com/carlosfachini/coffeebar` repository for public links and update metadata.
-- Use no timers, subprocesses, external dependencies, analytics or telemetry.
+- Use one cancelable in-process auto-off task; no subprocesses, external dependencies, analytics or telemetry.
 
 ## Version 0.1 Distribution
 

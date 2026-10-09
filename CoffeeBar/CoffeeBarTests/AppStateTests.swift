@@ -59,6 +59,37 @@ final class AppStateTests: XCTestCase {
         XCTAssertEqual(appState.statusMessage, "Inactive — normal sleep is allowed")
         XCTAssertEqual(sleepManager.activateCallCount, 1)
     }
+
+    func testAutoOffIsScheduledForActiveSession() {
+        let sleepManager = SleepManagerSpy()
+        let appState = AppState(sleepManager: sleepManager)
+
+        appState.setActive(true)
+
+        XCTAssertNotNil(appState.autoOffDate)
+        XCTAssertEqual(appState.autoOffDuration, .thirtyMinutes)
+    }
+
+    func testTurningOffCancelsAutoOff() {
+        let sleepManager = SleepManagerSpy()
+        let appState = AppState(sleepManager: sleepManager)
+
+        appState.setActive(true)
+        appState.setActive(false)
+
+        XCTAssertNil(appState.autoOffDate)
+    }
+
+    func testUntilTurnedOffDoesNotScheduleAutoOff() {
+        let sleepManager = SleepManagerSpy()
+        let appState = AppState(sleepManager: sleepManager)
+
+        appState.setAutoOffDuration(.untilTurnedOff)
+        appState.setActive(true)
+
+        XCTAssertTrue(appState.isActive)
+        XCTAssertNil(appState.autoOffDate)
+    }
 }
 
 @MainActor
