@@ -5,8 +5,7 @@ cask "coffeebar" do
   version "__VERSION__"
   sha256 "__SHA256__"
 
-  url "https://github.com/carlosfachini/coffeebar/releases/download/v#{version}/CoffeeBar-macos-universal-#{version}.zip",
-      verified: "github.com/carlosfachini/coffeebar/"
+  url "https://github.com/carlosfachini/coffeebar/releases/download/v#{version}/CoffeeBar-macos-universal-#{version}.zip"
   name "CoffeeBar"
   desc "Native menu bar utility that prevents idle system sleep"
   homepage "https://github.com/carlosfachini/coffeebar"
