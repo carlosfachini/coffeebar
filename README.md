@@ -16,7 +16,7 @@
 CoffeeBar is a lightweight native macOS menu bar app that prevents idle system sleep while AI agents, builds, downloads, and other long-running tasks finish. It has no accounts or telemetry and never changes your power settings permanently.
 
 <p align="center">
-  <img src="docs/coffeebar.png" alt="CoffeeBar menu bar controls" width="420" />
+  <img src="docs/coffeebar-0.2.0.png" alt="CoffeeBar menu bar controls" width="420" />
 </p>
 
 ## Why CoffeeBar?
