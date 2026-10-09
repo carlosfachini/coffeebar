@@ -2,6 +2,13 @@
 
 All notable CoffeeBar changes are documented in this file.
 
+## 0.2.1
+
+### Changed
+
+- Replaced the app icon with a macOS design that uses system-native framing and safe-area spacing.
+- Added versioned light and dark icon previews to the documentation.
+
 ## 0.2.0
 
 ### Added

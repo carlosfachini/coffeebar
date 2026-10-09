@@ -1,7 +1,7 @@
 # CoffeeBar
 
 <p align="center">
-  <img src="docs/coffeebar-icon.png" alt="CoffeeBar app icon" width="144" />
+  <img src="docs/coffeebar-icon-0.2.1-dark.png" alt="CoffeeBar app icon" width="144" />
 </p>
 
 <p align="center"><strong>Keep your Mac awake while AI agents and long-running tasks finish.</strong></p>
