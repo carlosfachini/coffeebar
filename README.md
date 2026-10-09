@@ -16,14 +16,15 @@
 CoffeeBar is a lightweight native macOS menu bar app that prevents idle system sleep while AI agents, builds, downloads, and other long-running tasks finish. It has no accounts or telemetry and never changes your power settings permanently.
 
 <p align="center">
-  <img src="docs/coffeebar.png" alt="CoffeeBar menu showing Keep Mac Awake and Launch at Login controls" width="420" />
+  <img src="docs/coffeebar.png" alt="CoffeeBar menu bar controls" width="420" />
 </p>
 
 ## Why CoffeeBar?
 
 Long-running work can be interrupted when a Mac goes to sleep. CoffeeBar gives you one clear switch to keep the system awake only while you need it.
 
-- One-click **Keep Mac Awake** control.
+- One-click **Keep Mac Awake** control with auto-off after 30 minutes by default.
+- Choose 30 minutes, 1 hour, or keep it on until manually disabled.
 - Native menu bar experience with no permanent Dock icon.
 - Clear active and inactive status.
 - Optional **Launch at Login**, disabled by default.
@@ -69,9 +70,10 @@ Only override Gatekeeper for a build downloaded from this repository or installe
 1. Open CoffeeBar from Finder, Launchpad, or Spotlight.
 2. Click the cup in the menu bar.
 3. Enable **Keep Mac Awake** while work is running.
-4. Disable it when normal idle sleep should resume.
+4. Choose the auto-off duration before or during the session. Select **Until turned off** for long-running work.
+5. Disable it when normal idle sleep should resume.
 
-The active panel shows **Active — idle sleep is blocked**, and the menu bar cup gains a small badge. CoffeeBar always starts with Keep Awake inactive.
+The active panel shows **Active — idle sleep is blocked**, its scheduled auto-off time, and the menu bar cup gains a small badge. CoffeeBar always starts with Keep Awake inactive.
 
 ### Reopen CoffeeBar
 
@@ -96,7 +98,7 @@ CoffeeBar intentionally does not install updates automatically.
 
 ## How it works
 
-CoffeeBar uses a native macOS activity to prevent idle system sleep only while Keep Awake is enabled. Display sleep, screen locking, and manual sleep remain available, and normal behavior returns immediately when CoffeeBar is disabled or closed.
+CoffeeBar uses a native macOS activity to prevent idle system sleep only while Keep Awake is enabled. Keep Awake switches off automatically after its selected duration, or immediately when disabled or closed. Display sleep, screen locking, and manual sleep remain available.
 
 ## Privacy and security
 
